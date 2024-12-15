@@ -23,6 +23,7 @@
 		<module>food-microservice</module>
 		<module>gateway-microservice</module>
 		<module>order-microservice</module>
+		<module>users-microservice</module>
 	</modules>
 
 	<properties>
