@@ -24,6 +24,7 @@
 		<module>gateway-microservice</module>
 		<module>order-microservice</module>
 		<module>users-microservice</module>
+		<module>eureka-server</module>
 	</modules>
 
 	<properties>
