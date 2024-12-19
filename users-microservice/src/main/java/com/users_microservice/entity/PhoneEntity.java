@@ -2,19 +2,21 @@ package com.users_microservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Builder
 @Entity
-@Table(name = "admin")
-public class AdminEntity {
+@Table(name = "phone")
+public class PhoneEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String phone;
 }

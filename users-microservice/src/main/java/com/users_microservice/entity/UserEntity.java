@@ -1,16 +1,17 @@
 package com.users_microservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Setter
+@Getter
+@EqualsAndHashCode(exclude = {"roles"})
+@ToString(exclude = {"roles"})
 @Builder
 @Entity
 @Table(name = "user")
@@ -42,6 +43,14 @@ public class UserEntity {
             updatable = false,
             name = "created_at")
     private LocalDateTime createdAt;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<RoleEntity> roles;
 
     @PrePersist
     protected void onCreate() {

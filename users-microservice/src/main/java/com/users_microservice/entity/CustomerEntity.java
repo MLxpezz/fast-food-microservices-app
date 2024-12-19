@@ -1,15 +1,18 @@
 package com.users_microservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
+@EqualsAndHashCode(exclude = {"phones", "addresses"})
+@ToString(exclude = {"phones", "addresses"})
 @Entity
 @Table(name = "customer")
 public class CustomerEntity {
@@ -24,9 +27,19 @@ public class CustomerEntity {
     @Column(nullable = false)
     private String lastname;
 
-    @Column(nullable = false)
-    private String address;
+    @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinTable(
+            name = "customer_phone",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "phone_id")
+    )
+    private Set<PhoneEntity> phones;
 
-    @Column(nullable = false)
-    private String phone;
+    @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinTable(
+            name = "customer_address",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id")
+    )
+    private List<AddressEntity> addresses;
 }
