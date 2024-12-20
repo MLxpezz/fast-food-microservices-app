@@ -1,4 +1,4 @@
-package com.users_microservice.entity;
+package com.users_microservice.entities;
 
 import com.users_microservice.enums.RoleEnum;
 import jakarta.persistence.*;
