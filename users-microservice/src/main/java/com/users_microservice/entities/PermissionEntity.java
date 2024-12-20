@@ -1,9 +1,8 @@
 package com.users_microservice.entities;
 
+import com.users_microservice.enums.PermissionEnum;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.security.Permission;
 
 @Setter
 @Getter
@@ -20,5 +19,5 @@ public class PermissionEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(updatable = false, unique = true)
-    private Permission permission;
+    private PermissionEnum permission;
 }
