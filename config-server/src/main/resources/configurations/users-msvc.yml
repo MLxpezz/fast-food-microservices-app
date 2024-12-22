@@ -7,9 +7,16 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
-    properties:
-      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
   driver-class-name: org.postgresql.Driver
+
+
+##EUREKA CONFIG
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+    instance:
+    preferIpAddress: true

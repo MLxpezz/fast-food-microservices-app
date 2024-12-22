@@ -19,4 +19,8 @@ public class PhoneEntity {
     private Long id;
 
     private String phone;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private CustomerEntity customer;
 }

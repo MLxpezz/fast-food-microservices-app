@@ -27,15 +27,13 @@ public class CustomerEntity {
     @Column(nullable = false)
     private String lastname;
 
-    @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinTable(
-            name = "customer_phone",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "phone_id")
-    )
+    @OneToMany(mappedBy = "customer",
+            cascade = {CascadeType.ALL, CascadeType.REMOVE},
+            fetch = FetchType.LAZY,
+            orphanRemoval = true)
     private Set<PhoneEntity> phones;
 
-    @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(
             name = "customer_address",
             joinColumns = @JoinColumn(name = "customer_id"),

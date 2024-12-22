@@ -44,7 +44,7 @@ public class UserEntity {
             name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
