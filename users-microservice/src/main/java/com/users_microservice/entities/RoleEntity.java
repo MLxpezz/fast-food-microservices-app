@@ -25,7 +25,7 @@ public class RoleEntity {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "role_permission",
             joinColumns = @JoinColumn(name = "role_id"),
