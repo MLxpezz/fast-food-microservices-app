@@ -10,7 +10,7 @@ public interface IUserService {
 
     UserDTO createUser(RegisAndLogDTO userInfo);
 
-    UserDTO updateUser(UpdateUserDTO userInfo);
+    UserDTO updateUser(Long id, UpdateUserDTO userInfo);
 
     UserDTO getUser(Long id);
 

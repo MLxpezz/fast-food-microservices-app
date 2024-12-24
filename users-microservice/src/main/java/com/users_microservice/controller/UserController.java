@@ -1,13 +1,13 @@
 package com.users_microservice.controller;
 
 import com.users_microservice.dto.RegisAndLogDTO;
+import com.users_microservice.dto.UpdateUserDTO;
 import com.users_microservice.dto.UserDTO;
 import com.users_microservice.service.interfaces.IUserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -22,5 +22,25 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<UserDTO> createUser(@RequestBody RegisAndLogDTO userData) {
         return ResponseEntity.ok(userService.createUser(userData));
+    }
+
+    @GetMapping("/get-all")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.getUsers());
+    }
+
+    @GetMapping("/get/{userId}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable long userId) {
+        return ResponseEntity.ok(userService.getUser(userId));
+    }
+
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable long userId) {
+        return ResponseEntity.ok(userService.deleteUser(userId));
+    }
+
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable long userId, @RequestBody UpdateUserDTO userData) {
+        return ResponseEntity.ok(userService.updateUser(userId, userData));
     }
 }

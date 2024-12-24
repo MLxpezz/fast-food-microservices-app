@@ -40,9 +40,7 @@ public class RoleAssignmentAspect {
 
         userRepository.findById(userId).ifPresent(user -> {
            user.setRoles(new HashSet<>(Set.of(roleService.getRole(RoleEnum.EMPLOYEE))));
-           userRepository.save(user);
+            log.info("Role assignment after creation successfully");
         });
-
-        log.info("Role assignment after creation successfully");
     }
 }
