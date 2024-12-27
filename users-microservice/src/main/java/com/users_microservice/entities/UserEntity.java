@@ -2,6 +2,7 @@ package com.users_microservice.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -13,13 +14,14 @@ import java.util.Set;
 @Getter
 @EqualsAndHashCode(exclude = {"roles"})
 @ToString(exclude = {"roles"})
-@Builder
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "users")
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false, unique = true)

@@ -2,7 +2,10 @@ package com.users_microservice.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,34 +13,38 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
-@EqualsAndHashCode(exclude = {"phones", "addresses"})
+@EqualsAndHashCode(exclude = {"phones", "addresses"}, callSuper = false)
 @ToString(exclude = {"phones", "addresses"})
+@SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "customer")
-public class CustomerEntity {
+public class CustomerEntity extends UserEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String lastname;
 
-    @OneToMany(mappedBy = "customer",
-            cascade = {CascadeType.ALL, CascadeType.REMOVE},
-            fetch = FetchType.LAZY,
-            orphanRemoval = true)
-    private Set<PhoneEntity> phones;
+    @OneToMany(
+            mappedBy = "customer",
+            cascade = {CascadeType.ALL, CascadeType.MERGE, CascadeType.PERSIST},
+            fetch = FetchType.LAZY
+    )
+    private Set<PhoneEntity> phones = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
+            fetch = FetchType.LAZY
+    )
     @JoinTable(
             name = "customer_address",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id")
     )
-    private List<AddressEntity> addresses;
+    private List<AddressEntity> addresses =  new ArrayList<>();
 }

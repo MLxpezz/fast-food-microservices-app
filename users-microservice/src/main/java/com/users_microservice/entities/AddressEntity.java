@@ -1,15 +1,13 @@
 package com.users_microservice.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "address")
 public class AddressEntity {
@@ -18,19 +16,19 @@ public class AddressEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String street;
 
-    @Column(nullable = false)
+    @Column
     private String city;
 
-    @Column(nullable = false)
+    @Column
     private String state;
 
-    @Column(nullable = false)
+    @Column
     private String zip;
 
-    @Column(nullable = false)
+    @Column
     private String country;
 
 

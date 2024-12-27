@@ -1,15 +1,13 @@
 package com.users_microservice.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "phone")
 public class PhoneEntity {
@@ -21,6 +19,8 @@ public class PhoneEntity {
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(
+            name = "customer_id"
+    )
     private CustomerEntity customer;
 }

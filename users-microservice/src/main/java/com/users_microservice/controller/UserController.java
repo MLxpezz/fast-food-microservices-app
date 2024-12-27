@@ -4,6 +4,7 @@ import com.users_microservice.dto.RegisAndLogDTO;
 import com.users_microservice.dto.UpdateUserDTO;
 import com.users_microservice.dto.UserDTO;
 import com.users_microservice.service.interfaces.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserDTO> createUser(@RequestBody RegisAndLogDTO userData) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid RegisAndLogDTO userData) {
         return ResponseEntity.ok(userService.createUser(userData));
     }
 
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{userId}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable long userId, @RequestBody UpdateUserDTO userData) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable long userId, @RequestBody @Valid UpdateUserDTO userData) {
         return ResponseEntity.ok(userService.updateUser(userId, userData));
     }
 }

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -62,13 +61,10 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     @Override
     public String deleteUser(Long id) {
-        Optional<UserEntity> user = userRepository.findById(id);
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("El usuario no existe"));
+        userRepository.delete(user);
 
-        if (user.isPresent()) {
-            userRepository.deleteById(id);
-            return "Usuario eliminado exitosamente";
-        }
-
-        return "Ocurrio un error, el usuario no existe";
+        return "Usuario eliminado correctamente";
     }
 }
