@@ -67,4 +67,9 @@ public class UserServiceImpl implements IUserService {
 
         return "Usuario eliminado correctamente";
     }
+
+    @Override
+    public boolean userExists(Long id) {
+        return userRepository.existsUserEntityById(id);
+    }
 }

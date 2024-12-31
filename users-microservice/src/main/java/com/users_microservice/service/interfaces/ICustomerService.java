@@ -16,4 +16,6 @@ public interface ICustomerService {
     List<CustomerDTO> getAllCustomers();
 
     String deleteCustomer(Long id);
+
+    boolean customerExist(Long id);
 }

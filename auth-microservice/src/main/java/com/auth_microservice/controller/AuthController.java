@@ -2,6 +2,7 @@ package com.auth_microservice.controller;
 
 import com.auth_microservice.http.in.UserDTO;
 import com.auth_microservice.http.out.UserTokenDTO;
+import com.auth_microservice.service.interfaces.IUserService;
 import com.auth_microservice.utils.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,22 +13,34 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final JwtUtils jwtUtils;
+    private final IUserService userService;
 
-    public AuthController(JwtUtils jwtUtils) {
+    public AuthController(JwtUtils jwtUtils, IUserService userService) {
         this.jwtUtils = jwtUtils;
+        this.userService = userService;
     }
 
     @PostMapping("/generate-token")
-    public ResponseEntity<?> generateToken(@RequestBody UserDTO user) {
-        String token = jwtUtils.generateToken(user);
-        UserTokenDTO userToken = UserTokenDTO
-                .builder()
-                .email(user.email())
-                .token(token)
-                .message("Autenticacion correcta, token generado")
-                .success(true)
-                .roles(user.roles().stream().toList())
-                .build();
-        return new ResponseEntity<>(userToken, HttpStatus.OK);
+    public ResponseEntity<?> generateToken(@RequestParam Long userId) {
+
+        try {
+            UserDTO user = userService.getUser(userId);
+
+            String token = jwtUtils.generateToken(user);
+
+            UserTokenDTO userToken = UserTokenDTO
+                    .builder()
+                    .email(user.email())
+                    .token(token)
+                    .message("Autenticacion correcta, token generado")
+                    .success(true)
+                    .roles(user.roles().stream().toList())
+                    .build();
+
+            return new ResponseEntity<>(userToken, HttpStatus.OK);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 }

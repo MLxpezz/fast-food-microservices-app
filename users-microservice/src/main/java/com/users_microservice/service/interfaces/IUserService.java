@@ -17,4 +17,6 @@ public interface IUserService {
     List<UserDTO> getUsers();
 
     String deleteUser(Long id);
+
+    boolean userExists(Long id);
 }

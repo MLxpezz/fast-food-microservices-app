@@ -107,4 +107,9 @@ public class CustomerServiceImpl implements ICustomerService {
         customerRepository.delete(customerToDelete);
         return "Cliente eliminado correctamente";
     }
+
+    @Override
+    public boolean customerExist(Long id) {
+        return customerRepository.existsCustomerEntityById(id);
+    }
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class CustomerMapper {
@@ -35,6 +36,16 @@ public class CustomerMapper {
                 .id(customerEntity.getId())
                 .name(customerEntity.getName())
                 .lastname(customerEntity.getLastname())
+                .email(customerEntity.getEmail())
+                .roles(
+                        customerEntity
+                                .getRoles()
+                                .stream()
+                                .map(role -> role
+                                        .getRole()
+                                        .name())
+                                .collect(Collectors.toList())
+                )
                 .addressList(
                         customerEntity.getAddresses() != null
                         ? addressMapper.addressListToAddressDtoList(customerEntity.getAddresses())

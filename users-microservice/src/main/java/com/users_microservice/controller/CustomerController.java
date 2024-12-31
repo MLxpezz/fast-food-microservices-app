@@ -2,6 +2,7 @@ package com.users_microservice.controller;
 
 import com.users_microservice.dto.CustomerDTO;
 import com.users_microservice.dto.RegisAndLogDTO;
+import com.users_microservice.http.out.UserResponseDTO;
 import com.users_microservice.service.interfaces.ICustomerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,25 @@ public class CustomerController {
     @PutMapping("/update/{customerId}")
     public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long customerId, @RequestBody @Valid CustomerDTO customerData) {
         return new ResponseEntity<>(customerService.updateCustomer(customerId, customerData), HttpStatus.OK);
+    }
+
+    @GetMapping("/check-customer/{id}")
+    public ResponseEntity<?> checkCustomerById(@PathVariable Long id) {
+        boolean existsCustomer = customerService.customerExist(id);
+
+        if (existsCustomer) {
+            CustomerDTO user = customerService.getCustomer(id);
+
+            UserResponseDTO userResponseDTO = UserResponseDTO
+                    .builder()
+                    .email(user.email())
+                    .roles(user.roles())
+                    .id(user.id())
+                    .build();
+
+            return new ResponseEntity<>(userResponseDTO, HttpStatus.FOUND);
+        } else {
+            return new ResponseEntity<>(false , HttpStatus.NOT_FOUND);
+        }
     }
 }

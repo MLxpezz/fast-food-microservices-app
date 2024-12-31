@@ -5,6 +5,7 @@ import com.users_microservice.dto.UpdateUserDTO;
 import com.users_microservice.dto.UserDTO;
 import com.users_microservice.service.interfaces.IUserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +44,16 @@ public class UserController {
     @PutMapping("/update/{userId}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable long userId, @RequestBody @Valid UpdateUserDTO userData) {
         return ResponseEntity.ok(userService.updateUser(userId, userData));
+    }
+
+    @GetMapping("/exists-user/{userId}")
+    public ResponseEntity<Boolean> existsUser(@PathVariable long userId) {
+        boolean existsUser = userService.userExists(userId);
+
+        if (existsUser) {
+            return new ResponseEntity<>(true, HttpStatus.FOUND);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
     }
 }
