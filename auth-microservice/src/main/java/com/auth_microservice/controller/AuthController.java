@@ -1,5 +1,6 @@
 package com.auth_microservice.controller;
 
+import com.auth_microservice.http.in.LoginRequestDTO;
 import com.auth_microservice.http.in.UserDTO;
 import com.auth_microservice.http.out.UserTokenDTO;
 import com.auth_microservice.service.interfaces.IUserService;
@@ -21,10 +22,10 @@ public class AuthController {
     }
 
     @PostMapping("/generate-token")
-    public ResponseEntity<?> generateToken(@RequestParam Long userId) {
+    public ResponseEntity<?> generateToken(@RequestBody LoginRequestDTO userCredentials) {
 
         try {
-            UserDTO user = userService.getUser(userId);
+            UserDTO user = userService.getUser(userCredentials);
 
             String token = jwtUtils.generateToken(user);
 

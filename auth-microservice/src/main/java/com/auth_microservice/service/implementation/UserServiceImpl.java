@@ -1,5 +1,6 @@
 package com.auth_microservice.service.implementation;
 
+import com.auth_microservice.http.in.LoginRequestDTO;
 import com.auth_microservice.http.in.UserDTO;
 import com.auth_microservice.service.interfaces.IUserService;
 import org.springframework.http.HttpStatus;
@@ -17,17 +18,18 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDTO getUser(Long id) {
+    public UserDTO getUser(LoginRequestDTO userCredentials) {
         try {
             return webClient
-                    .get()
-                    .uri("/api/v1/customers/check-customer/{id}", id)
+                    .post()
+                    .uri("/api/v1/customers/check-customer")
+                    .bodyValue(userCredentials)
                     .retrieve()
                     .bodyToMono(UserDTO.class)
                     .block();
         } catch (WebClientResponseException exception) {
                 if (exception.getStatusCode() == HttpStatus.NOT_FOUND) {
-                    throw new RuntimeException("User with id " + id + " not found");
+                    throw new RuntimeException("User with email " + userCredentials.email() + " not found");
                 }
                 throw new RuntimeException("communication error");
         }
