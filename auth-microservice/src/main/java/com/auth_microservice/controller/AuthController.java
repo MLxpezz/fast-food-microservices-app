@@ -5,6 +5,7 @@ import com.auth_microservice.http.in.UserDTO;
 import com.auth_microservice.http.out.UserTokenDTO;
 import com.auth_microservice.service.interfaces.IUserService;
 import com.auth_microservice.utils.JwtUtils;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/generate-token")
-    public ResponseEntity<?> generateToken(@RequestBody LoginRequestDTO userCredentials) {
+    public ResponseEntity<?> generateToken(@RequestBody @Valid LoginRequestDTO userCredentials) {
 
         try {
             UserDTO user = userService.getUser(userCredentials);

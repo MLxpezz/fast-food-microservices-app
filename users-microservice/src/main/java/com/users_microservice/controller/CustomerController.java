@@ -46,12 +46,15 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.updateCustomer(customerId, customerData), HttpStatus.OK);
     }
 
-    @GetMapping("/check-customer/{id}")
-    public ResponseEntity<?> checkCustomerById(@PathVariable Long id) {
-        boolean existsCustomer = customerService.customerExist(id);
-
+    @PostMapping("/check-customer")
+    public ResponseEntity<?> checkCustomerByEmail(@RequestBody @Valid RegisAndLogDTO customerData) {
+        boolean existsCustomer = customerService.customerExist(customerData.email());
+        System.out.println("datos entrantes: " + customerData.email());
+        System.out.println("Entrando al metodo para checar el usuario");
+        System.out.println("existe el usuario: " + existsCustomer);
         if (existsCustomer) {
-            CustomerDTO user = customerService.getCustomer(id);
+            System.out.println("si encontro al usuario");
+            CustomerDTO user = customerService.getCustomerByEmail(customerData);
 
             UserResponseDTO userResponseDTO = UserResponseDTO
                     .builder()
@@ -60,6 +63,7 @@ public class CustomerController {
                     .id(user.id())
                     .build();
 
+            System.out.println("si encontro al usuario: " + userResponseDTO.email());
             return new ResponseEntity<>(userResponseDTO, HttpStatus.FOUND);
         } else {
             return new ResponseEntity<>(false , HttpStatus.NOT_FOUND);

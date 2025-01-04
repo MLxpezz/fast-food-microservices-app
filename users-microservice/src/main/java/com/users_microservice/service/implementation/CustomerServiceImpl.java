@@ -6,6 +6,7 @@ import com.users_microservice.entities.AddressEntity;
 import com.users_microservice.entities.CustomerEntity;
 import com.users_microservice.entities.PhoneEntity;
 import com.users_microservice.enums.RoleEnum;
+import com.users_microservice.exceptions.PasswordNotMatchesException;
 import com.users_microservice.repository.CustomerRepository;
 import com.users_microservice.service.interfaces.ICustomerService;
 import com.users_microservice.service.interfaces.IRoleService;
@@ -13,6 +14,7 @@ import com.users_microservice.utils.AddressMapper;
 import com.users_microservice.utils.CustomerMapper;
 import com.users_microservice.utils.PhoneMapper;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,17 +30,19 @@ public class CustomerServiceImpl implements ICustomerService {
     private final IRoleService roleService;
     private final PhoneMapper phoneMapper;
     private final AddressMapper addressMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public CustomerServiceImpl(
             CustomerRepository customerRepository,
             CustomerMapper customerMapper,
-            IRoleService roleService, PhoneMapper phoneMapper, AddressMapper addressMapper
+            IRoleService roleService, PhoneMapper phoneMapper, AddressMapper addressMapper, PasswordEncoder passwordEncoder
     ) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.roleService = roleService;
         this.phoneMapper = phoneMapper;
         this.addressMapper = addressMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -47,6 +51,7 @@ public class CustomerServiceImpl implements ICustomerService {
     public CustomerDTO createCustomer(RegisAndLogDTO customerData) {
         CustomerEntity newCustomer = customerMapper.customerEntityFromRequestDto(customerData);
         newCustomer.setRoles(new HashSet<>(Set.of(roleService.getRole(RoleEnum.CUSTOMER))));
+        newCustomer.setPassword(passwordEncoder.encode(newCustomer.getPassword()));
         return customerMapper.dtoFromEntity(customerRepository.save(newCustomer));
     }
 
@@ -109,7 +114,20 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public boolean customerExist(Long id) {
-        return customerRepository.existsCustomerEntityById(id);
+    public boolean customerExist(String email) {
+        return customerRepository.existsCustomerEntityByEmail(email);
+    }
+
+    @Override
+    public CustomerDTO getCustomerByEmail(RegisAndLogDTO customerData) {
+        CustomerEntity customer = customerRepository
+                .findCustomerEntityByEmail(customerData.email())
+                .orElseThrow(() -> new EntityNotFoundException("El cliente no existe"));
+
+        if(!passwordEncoder.matches(customerData.password(), customer.getPassword())) {
+            throw new PasswordNotMatchesException("Las contrase;as no coinciden");
+        }
+
+        return customerMapper.dtoFromEntity(customer);
     }
 }

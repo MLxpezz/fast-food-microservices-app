@@ -30,4 +30,9 @@ public class GlobalExceptions {
     public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(PasswordNotMatchesException.class)
+    public ResponseEntity<String> handlePasswordNotMatches(PasswordNotMatchesException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

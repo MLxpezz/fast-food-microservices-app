@@ -17,5 +17,7 @@ public interface ICustomerService {
 
     String deleteCustomer(Long id);
 
-    boolean customerExist(Long id);
+    boolean customerExist(String email);
+
+    CustomerDTO getCustomerByEmail(RegisAndLogDTO customerData);
 }
