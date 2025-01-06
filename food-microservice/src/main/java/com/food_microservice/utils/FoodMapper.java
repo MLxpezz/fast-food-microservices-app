@@ -6,7 +6,7 @@ import com.food_microservice.enums.TypeFoodEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -18,7 +18,7 @@ public class FoodMapper {
                 .name(food.name())
                 .description(food.description())
                 .price(food.price())
-                .typeFood(TypeFoodEnum.valueOf(food.typeFood().toUpperCase(Locale.ROOT)))
+                .typeFood(TypeFoodEnum.fromString(food.typeFood()))
                 .build();
     }
 
@@ -38,5 +38,12 @@ public class FoodMapper {
                 .stream()
                 .map(this::foodEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    public Set<FoodEntity> dtoListToFoodEntityList(Set<FoodDTO> foods) {
+        return foods
+                .stream()
+                .map(this::dtoToFoodEntity)
+                .collect(Collectors.toSet());
     }
 }

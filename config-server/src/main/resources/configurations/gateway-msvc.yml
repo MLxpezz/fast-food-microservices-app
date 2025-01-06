@@ -26,4 +26,8 @@ spring:
           predicates:
             - Path=/api/v1/foods/**
           uri: lb://food-msvc
+        - id: food-msvc-foods_package
+          predicates:
+            - Path=/api/v1/food-package/**
+          uri: lb://food-msvc
 
