@@ -1,0 +1,21 @@
+server:
+  port: 9082
+
+#POSTGRES DB CONFIG
+spring:
+  datasource:
+    url: ${FOOD_DATABASE_URL}
+    username: ${FOOD_POSTGRES_USER}
+    password: ${FOOD_POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  driver-class-name: org.postgresql.Driver
+
+##EUREKA CONFIG
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  instance: localhost
